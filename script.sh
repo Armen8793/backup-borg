@@ -1,10 +1,10 @@
 #!/bin/bash
 
 # Set variables
-SOURCE_DIR="/home/armen/my-abb-demo"
-REMOTE_USER="armen"
-REMOTE_HOST="192.168.1.210"
-BACKUP_REPO="/home/armen/remote-backup/borg"
+SOURCE_DIR="/path/to/dir/which/you/want/to/backup"
+REMOTE_USER="username"
+REMOTE_HOST="ip or dns"
+BACKUP_REPO="remote borg repo"
 BACKUP_NAME="$(hostname)-$(date +%Y-%m-%d_%H-%M-%S)"
 
 # Run BorgBackup via SSH
