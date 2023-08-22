@@ -1,0 +1,4 @@
+Host 192.168.18.53
+	IdentityFile ~/.ssh/ansible-abb
+	ServerAliveInterval 10
+	ServerAliveCountMax 30

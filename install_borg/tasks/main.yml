@@ -1,0 +1,93 @@
+---
+# tasks file for install_borg
+- name: Install Borgbackup package
+  apt:
+    name: borgbackup
+    state: present
+
+- name: Create Borg Backup Directory in dev servers
+  ansible.builtin.file:
+    path: ~/borgbackup-dev
+    state: directory
+    mode: '0755'
+  when: inventory_hostname in groups ['dev']
+
+- name: Create Borg Backup Directory in prod servers
+  ansible.builtin.file:
+    path: ~/borgbackup-prod
+    state: directory
+    mode: '0755'
+  when: inventory_hostname in groups ['prod']
+
+
+- name: Copy Borg Backup script to dev server
+  copy:
+    src: ~/backup/script-dev.sh
+    dest: ~/borgbackup-dev/script.sh
+    mode: '0755'
+  when: inventory_hostname in groups ['dev']
+
+- name: Copy Borg Backup script to prod server
+  copy:
+    src: ~/backup/script-prod.sh
+    dest: ~/borgbackup-prod/script.sh
+    mode: '0755'
+  when: inventory_hostname in groups ['prod']
+
+
+- name: Copy .ssh key
+  copy:
+    src: ~/.ssh/ansible-abb
+    dest: ~/.ssh/ansible-abb
+    mode: '0400'
+
+- name: Copy ssh key for root 
+  copy:
+    src: ~/.ssh/ansible-abb
+    dest: /root/.ssh/ansible-abb
+    mode: '0400'
+
+- name: Copy ssh config for dev servers home
+  copy:
+    src: ~/.ssh/config-dev
+    dest: ~/.ssh/config
+    mode: '0400'
+  when: inventory_hostname in groups ['dev']
+
+- name: Copy ssh config for prod servers home
+  copy:
+    src: ~/.ssh/config-prod
+    dest: ~/.ssh/config
+    mode: '0400'
+  when: inventory_hostname in groups ['prod']
+
+
+- name: Copy ssh config for root dev
+  copy:
+    src: ~/.ssh/config-dev
+    dest: /root/.ssh/config
+    mode: '0400'
+  when: inventory_hostname in groups ['dev']
+
+- name: Copy ssh config for root prod
+  copy:
+    src: ~/.ssh/config-dev
+    dest: /root/.ssh/config-prod
+    mode: '0400'
+  when: inventory_hostname in groups ['prod']
+
+
+- name: Cron job to run every minute in dev
+  ansible.builtin.cron:
+    name: "job every minute"
+    minute: "*"
+    job: "/root/borgbackup-dev/script.sh"
+  when: inventory_hostname in groups ['dev']
+
+- name: Cron job to run every minute in prod
+  ansible.builtin.cron:
+    name: "job every minute"
+    minute: "*"
+    job: "/root/borgbackup-prod/script.sh"
+  when: inventory_hostname in groups ['prod']
+
