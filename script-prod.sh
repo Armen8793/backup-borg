@@ -1,12 +1,12 @@
 #!/bin/bash
 
 # Set variables
-BORG_REPO="/home/ansible-abb/backup-prod/$(hostname)"
-BACKUP_SERVER="192.168.116.66"
-BACKUP_USER="ansible-abb"
-LOCAL_REPO="/home/armen/backup/borg"
-SSH_KEY="/home/armen/Downloads/ansible-abb"
-SOURCE_DIRS="/opt"
+BORG_REPO="prod backup server borg repo full path/$(hostname)"
+BACKUP_SERVER="backup server ip or dns"
+BACKUP_USER="backup server username"
+LOCAL_REPO="local borg repo full path"
+SSH_KEY="/ssh key full path"
+SOURCE_DIRS="/opt /tmp and otheryou want to backup"
 # Archive name with timestamp
 ARCHIVE_NAME="$(hostname)-$(date +'%Y-%m-%d_%H-%M')"
 
