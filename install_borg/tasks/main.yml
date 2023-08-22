@@ -37,14 +37,14 @@
 
 - name: Copy .ssh key
   copy:
-    src: ~/.ssh/ansible-abb
-    dest: ~/.ssh/ansible-abb
+    src: ~/.ssh/id_rsa
+    dest: ~/.ssh/id_rsa
     mode: '0400'
 
 - name: Copy ssh key for root 
   copy:
-    src: ~/.ssh/ansible-abb
-    dest: /root/.ssh/ansible-abb
+    src: ~/.ssh/id_rsa
+    dest: /root/.ssh/id_rsa
     mode: '0400'
 
 - name: Copy ssh config for dev servers home
