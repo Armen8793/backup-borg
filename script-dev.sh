@@ -43,22 +43,22 @@ fi
 
 if [[ $current_hostname == *"docker"* ]]; then
     for volume in $(docker volume ls --filter "name=logs" --format={{.Name}}); do
-        VOLUME_BACKUP=$(docker volume ls --filter "name=${volume}" --format={{.Mountpoint}})
+        VOLUME_BACKUP=$(docker volume ls --filter "name=${volume}" --format={{.Name}})
         echo ${VOLUME_BACKUP} >> backup-dirs.txt
     done
 
     for volume in $(docker volume ls --filter "name=exch" --format={{.Name}}); do
-        VOLUME_BACKUP=$(docker volume ls --filter "name=${volume}" --format={{.Mountpoint}})
+        VOLUME_BACKUP=$(docker volume ls --filter "name=${volume}" --format={{.Name}})
         echo ${VOLUME_BACKUP} >> backup-dirs.txt
     done
 
     for volume in $(docker volume ls --filter "name=data" --format={{.Name}}); do
-        VOLUME_BACKUP=$(docker volume ls --filter "name=${volume}" --format={{.Mountpoint}})
+        VOLUME_BACKUP=$(docker volume ls --filter "name=${volume}" --format={{.Name}})
         echo ${VOLUME_BACKUP} >> backup-dirs.txt
     done
 
     for volume in $(docker volume ls --filter "name=monitoring" --format={{.Name}}); do
-        VOLUME_BACKUP=$(docker volume ls --filter "name=${volume}" --format={{.Mountpoint}})
+        VOLUME_BACKUP=$(docker volume ls --filter "name=${volume}" --format={{.Name}})
         echo ${VOLUME_BACKUP} >> backup-dirs.txt
     done
     #echo "Hostname contains 'docker'."
