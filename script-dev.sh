@@ -40,6 +40,50 @@ fi
 #borg init -e none $BACKUP_USER@$BACKUP_SERVER:$BORG_REPO
 
 #for dir in "${SOURCE_DIRS}"
+
+if [[ $current_hostname == *"docker"* ]]; then
+    for volume in $(docker volume ls --filter "name=logs" --format={{.Name}}); do
+        VOLUME_BACKUP=$(docker volume ls --filter "name=${volume}" --format={{.Mountpoint}})
+        echo ${VOLUME_BACKUP} >> backup-dirs.txt
+    done
+
+    for volume in $(docker volume ls --filter "name=exch" --format={{.Name}}); do
+        VOLUME_BACKUP=$(docker volume ls --filter "name=${volume}" --format={{.Mountpoint}})
+        echo ${VOLUME_BACKUP} >> backup-dirs.txt
+    done
+
+    for volume in $(docker volume ls --filter "name=data" --format={{.Name}}); do
+        VOLUME_BACKUP=$(docker volume ls --filter "name=${volume}" --format={{.Mountpoint}})
+        echo ${VOLUME_BACKUP} >> backup-dirs.txt
+    done
+
+    for volume in $(docker volume ls --filter "name=monitoring" --format={{.Name}}); do
+        VOLUME_BACKUP=$(docker volume ls --filter "name=${volume}" --format={{.Mountpoint}})
+        echo ${VOLUME_BACKUP} >> backup-dirs.txt
+    done
+    #echo "Hostname contains 'docker'."
+    #logs_directory="/var/lib/docker/volumes"
+    #find "$logs_directory" -type d -name "*logs*" -exec find {} -type f \; | while read -r log_file; do
+        #log_filename=$(basename "$log_file")
+        #scp -i "$SSH_KEY" "$log_file" "$BACKUP_USER@$BACKUP_SERVER:$BORG_REPO/$current_hostname-volumes-backup"
+    #done
+
+    #find "$logs_directory" -type d -name "*exch*" -exec find {} -type f \; | while read -r log_file; do
+        #log_filename=$(basename "$log_file")
+        #scp -i "$SSH_KEY" "$log_file" "$BACKUP_USER@$BACKUP_SERVER:$BORG_REPO/$current_hostname-volumes-backup"
+    #done
+
+    #find "$logs_directory" -type d -name "*data*" -exec find {} -type f \; | while read -r log_file; do
+        #log_filename=$(basename "$log_file")
+        #scp -i "$SSH_KEY" "$log_file" "$BACKUP_USER@$BACKUP_SERVER:$BORG_REPO/$current_hostname-volumes-backup"
+    #done
+
+    #find "$logs_directory" -type d -name "*monitoring*" -exec find {} -type f \; | while read -r log_file; do
+        #log_filename=$(basename "$log_file")
+        #scp -i "$SSH_KEY" "$log_file" "$BACKUP_USER@$BACKUP_SERVER:$BORG_REPO/$current_hostname-volumes-backup"
+    #done
+#fi
+
 for dir in "$(cat ~/borgbackup-dev/backup-dirs.txt)"; do
     echo "Backing up $dir..."
     borg create -s --progress $BACKUP_USER@$BACKUP_SERVER:$BORG_REPO::$ARCHIVE_NAME $dir
@@ -49,30 +93,6 @@ for dir in "$(cat ~/borgbackup-dev/backup-dirs.txt)"; do
         echo "Backup of $dir failed."
     fi
 done
-
-if [[ $current_hostname == *"docker"* ]]; then
-    echo "Hostname contains 'docker'."
-    logs_directory="/var/lib/docker/volumes"
-    find "$logs_directory" -type d -name "*logs*" -exec find {} -type f \; | while read -r log_file; do
-        log_filename=$(basename "$log_file")
-        scp -i "$SSH_KEY" "$log_file" "$BACKUP_USER@$BACKUP_SERVER:$BORG_REPO/$current_hostname-volumes-backup"
-    done
-
-    find "$logs_directory" -type d -name "*exch*" -exec find {} -type f \; | while read -r log_file; do
-        log_filename=$(basename "$log_file")
-        scp -i "$SSH_KEY" "$log_file" "$BACKUP_USER@$BACKUP_SERVER:$BORG_REPO/$current_hostname-volumes-backup"
-    done
-
-    find "$logs_directory" -type d -name "*data*" -exec find {} -type f \; | while read -r log_file; do
-        log_filename=$(basename "$log_file")
-        scp -i "$SSH_KEY" "$log_file" "$BACKUP_USER@$BACKUP_SERVER:$BORG_REPO/$current_hostname-volumes-backup"
-    done
-
-    find "$logs_directory" -type d -name "*monitoring*" -exec find {} -type f \; | while read -r log_file; do
-        log_filename=$(basename "$log_file")
-        scp -i "$SSH_KEY" "$log_file" "$BACKUP_USER@$BACKUP_SERVER:$BORG_REPO/$current_hostname-volumes-backup"
-    done
-fi
 
 
 # Prune old backups on the local repository
