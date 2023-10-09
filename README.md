@@ -18,3 +18,17 @@ Create a shell script similar to the previous example, but this time it will inc
 see script.sh
 chmod +x script.sh
 with crontab -e automate executing the command to send backups to remote host
+
+Do not forget to create .pgpass file in your home dir for postgres
+
+vim ~/.pgpass
+
+hostname:port:database:username:password
+
+for example
+
+localhost:5432:mydb:myuser:mypassword
+
+And change permissions 
+
+chmod 600 ~/.pgpass
