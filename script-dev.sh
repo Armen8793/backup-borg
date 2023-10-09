@@ -1,19 +1,19 @@
 #!/bin/bash
 
 # Set variables
-BORG_REPO="/home/ansible-abb/backup-test/$(hostname)"
-BACKUP_SERVER="192.168.18.53"
-BACKUP_USER="ansible-abb"
+BORG_REPO="/path/to your/backup server repo/$(hostname)"
+BACKUP_SERVER="backup server ip"
+BACKUP_USER="backup server user"
 #LOCAL_REPO="/home/armen/backup"
-SSH_KEY="~/.ssh/ansible-abb"
+SSH_KEY="~/.ssh/sshkey"
 #SOURCE_DIRS="/srv /opt"
 # Archive name with timestamp
 ARCHIVE_NAME="$(hostname)-$(date +'%Y-%m-%d_%H-%M')"
 current_hostname=$(hostname)
 #VOLUMES="/home/ansible-abb/backup-test/pg_volumes.txt"
 #PGDUMP_DIR="/root/postgres-dump"
-PSQL_USER="postgres"
-PSQL_PWD="8FbWhlyMJCjxotGgew2l"
+PSQL_USER="postgres user"
+PSQL_PWD="postgres password"
 PGB_PORT="6432"
 
 # Set the environment variable
