@@ -1,5 +1,5 @@
 - name: Manage Borg Backups
   hosts: all
-  become: true
+  #become: true
   roles:
     - name of your ansible role
